@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Home, Contact } from './pages/index';
 import { Header, Footer } from './components/index';
+import './style.sass'
 
 function App() {
   return (
