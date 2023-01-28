@@ -1,8 +1,11 @@
 import React from 'react'
+import { Search } from '../../components'
+import HomeSass from './Home.module.sass'
 
 const Home = () => {
   return (
-    <div>
+    <div className={HomeSass.container}>
+        <Search />
         Home
     </div>
   )
