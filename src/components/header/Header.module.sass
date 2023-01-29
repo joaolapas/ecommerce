@@ -36,10 +36,21 @@
 
     .nav
         margin-right: 100px
+        @media screen and (max-width: 1024px)
+            scale: 0.6
         @media screen and (max-width: 720px)
             display: none
     .loginNav
         display: flex
+        justify-content: space-evenly
+        @media screen and (max-width: 1024px) and (min-width: 721px)
+            scale: 0.6
+            margin-right: -40px
+        
+        ul
+            margin-right: 20px
+            
+
 
 ul
     display: flex
@@ -66,12 +77,12 @@ ul
     color: styles.$white
     margin-right: 30px
     list-style: none
-    font-size: 2rem
+    font-size: 1.5rem
     transition: all 0.3s ease-in-out
     text-decoration: none
     @media screen and (max-width: 400px)
-        font-size: 1.4rem
-        margin-right: 10px
+        font-size: 1rem
+        margin-right: 0px
     &:hover
         color: styles.$orange
         cursor: pointer
@@ -87,7 +98,7 @@ ul
 .hamburger
     color: styles.$white
     font-size: 2rem
-    margin: 0 20px
+    margin: 0 40px 0 20px
     @media screen and (min-width: 720px)
         display: none
     &:hover
@@ -132,6 +143,7 @@ ul
     justify-content: start
     align-items: center
     transform: translateX(0)
+    transform: scale(1)
     transition: all 0.3s ease-in-out
 
     .menuList
@@ -140,8 +152,9 @@ ul
         justify-content: center
         align-items: center
         color: styles.$white
-        width: 60vw
+        width: 70vw
         padding: 20px 0
+        margin-right: 1px
 
         .menuItemAdmin
             margin:30px
@@ -152,6 +165,8 @@ ul
             margin:30px
             font-size: 2rem
             list-style: none
+            text-decoration: none
+            color: styles.$white
 .menu
     position: absolute
     top: 100px
@@ -163,5 +178,18 @@ ul
     flex-direction: column
     justify-content: start
     align-items: center
-    transform: translateX(100%)
+    transform: translateX(300%)
+    transform: scale(0)
     transition: all 0.3s ease-in-out
+    &:after
+        display: none
+
+.menuItemAdmin
+    list-style: none
+    background: styles.$orange
+    padding: 0 15px
+    border-radius: 5px
+    color: styles.$white
+    text-decoration: none
+    
+        

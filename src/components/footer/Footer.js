@@ -5,7 +5,7 @@ import FooterSass from './Footer.module.sass'
 const Footer = () => {
   return (
     <footer className={FooterSass.footer}>
-        Para já, este vai ser o Footer
+        © 2023 - Coded by João Lapas
     </footer>
   )
 }

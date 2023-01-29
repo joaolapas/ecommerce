@@ -1,39 +1,110 @@
 import React from "react";
 import RegisterSass from "./Register.module.sass";
-
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer, toast } from "react-toastify";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../firebase/config";
+import Loader from "../../components/loader/Loader";
+import { Link, useNavigate } from "react-router-dom";
 
 const Register = () => {
+  const [firstName, setFirstName] = React.useState("");
+  const [lastName, setLastName] = React.useState("");
+  const [username, setUsername] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [confirmPassword, setConfirmPassword] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
+  
+  const navigate = useNavigate();
+  const registerUser = (e) => {
+    e.preventDefault();
+    if (password !== confirmPassword) {
+      toast.error("Passwords do not match");
+    } else {
+      setLoading(true);
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          setLoading(false);
+          toast.success(`Welcome ${username}`);
+          setFirstName("");
+          setLastName("");
+          setUsername("");
+          setEmail("");
+          setPassword("");
+          setConfirmPassword("");
+          navigate("/login");
+        })
+        .catch((error) => {
+          toast.error(error.message);
+          setLoading(false)
+        });
+    }
+  };
+
   return (
-    <div className={RegisterSass.register}>
-    <div className={RegisterSass.container}>
-      <h1>SIGN IN</h1>
-      <form>
-        <div className={RegisterSass.names}>
-          <div>
-            <label for="firstName">First Name:</label>
-            <input id="firstName" type="text" className={RegisterSass.firstName}></input>
-          </div>
-          <div>
-            <label for="lastName">Last Name:</label>
-            <input id="lastName" type="text" className={RegisterSass.lastName}></input>
-          </div>
-          
+    <>
+      <ToastContainer />
+      {loading && <Loader />}
+      <div className={RegisterSass.register}>
+        <div className={RegisterSass.container}>
+          <h1>REGISTER</h1>
+          <form onSubmit={registerUser}>
+            <div className={RegisterSass.names}>
+              <div>
+                <input
+                  placeholder="First Name"
+                  type="text"
+                  className={RegisterSass.firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                ></input>
+              </div>
+              <div>
+                <input
+                  placeholder="Last Name"
+                  type="text"
+                  className={RegisterSass.lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                ></input>
+              </div>
+            </div>
+
+            <input
+              placeholder="Username"
+              type="username"
+              className={RegisterSass.username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            ></input>
+
+            <input
+              placeholder="Email"
+              type="email"
+              className={RegisterSass.email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            ></input>
+
+            <input
+              placeholder="Password"
+              type="password"
+              className={RegisterSass.password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            ></input>
+            <input
+              placeholder="Confirm Password"
+              type="password"
+              className={RegisterSass.password}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+            ></input>
+            <button type="submit">REGISTER</button>
+          </form>
         </div>
-        
-        <label for="username">Username:</label>
-        <input id="username" type="username" className={RegisterSass.username}></input>
-        <label for="email">Email:</label>
-        <input id="email" type="email" className={RegisterSass.email}></input>
-        <label for="password">Password:</label>
-        <input
-          id="password"
-          type="password"
-          className={RegisterSass.password}
-        ></input>
-        <button type='submit'>SIGN IN</button>
-      </form>
-    </div>
-    </div>
+      </div>
+    </>
   );
 };
 

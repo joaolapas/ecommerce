@@ -21,7 +21,7 @@ const logo = (
   </Link>
 );
 const Header = () => {
-  const [logged, setLogged] = React.useState(false);
+  const [logged, setLogged] = React.useState(true);
   const [admin, setAdmin] = React.useState(true);
   const [showMenu, setShowMenu] = React.useState(false);
 
@@ -45,6 +45,11 @@ const Header = () => {
                 Contact
               </Link>
             </li>
+            {logged ? <li className={HeaderSass.navItem}>
+              <Link className={HeaderSass.Link} to="/orders">
+                Orders
+              </Link>
+            </li> : null}
             {admin ? (
               <li className={HeaderSass.navItemAdmin}>
                 <Link className={HeaderSass.Link} to="/admin">
@@ -67,7 +72,7 @@ const Header = () => {
             )}
             {logged ? (
               <li className={HeaderSass.link}>
-                <a onClick={() => setLogged(false)}>Log out</a>
+                <Link to='/' className={HeaderSass.Link} onClick={() => setLogged(false)}>Log out</Link>
               </li>
             ) : (
               <li className={HeaderSass.link}>
@@ -83,11 +88,12 @@ const Header = () => {
       </div>
       <div className={showMenu ? HeaderSass.showMenu : HeaderSass.menu}>
         <ul className={HeaderSass.menuList}>
-          {admin ? <li className={HeaderSass.menuItemAdmin}>Home</li> : null}
-          <li className={HeaderSass.menuItem}>Home</li>
-          <li className={HeaderSass.menuItem}>Contact Us</li>
-          <li className={HeaderSass.menuItem}>Log In</li>
-          <li className={HeaderSass.menuItem}>Sign In</li>
+          {admin ? <Link to='/admin' className={HeaderSass.menuItemAdmin} onClick={toggleMenu}>Admin</Link> : null}
+          <Link to='/' className={HeaderSass.menuItem} onClick={toggleMenu}>Home</Link>
+          <Link to='/contact' className={HeaderSass.menuItem} onClick={toggleMenu}>Contact Us</Link>
+          {logged? <Link to='/orders' className={HeaderSass.menuItem} onClick={toggleMenu}>My Orders</Link> : null}
+          <Link to='/login' className={HeaderSass.menuItem} onClick={toggleMenu}>Log In</Link>
+          <Link to='/register' className={HeaderSass.menuItem} onClick={toggleMenu}>Sign In</Link>
         </ul>
       </div>
     </header>
