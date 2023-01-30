@@ -1,6 +1,6 @@
 import React from "react";
 import LoginSass from "./Login.module.sass";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
 import { auth } from "../../firebase/config";
@@ -13,6 +13,7 @@ const Login = () => {
   const [loading, setLoading] = React.useState(false);
 
   const navigate = useNavigate();
+  const provider = new GoogleAuthProvider();
 
   const loginUser = (e) => {
     e.preventDefault();
@@ -31,6 +32,30 @@ const Login = () => {
         setLoading(false)
       });
   };
+
+  const signInWithGoogle = (e) => {
+    e.preventDefault();
+    setLoading(true)
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential.accessToken;
+        const user = result.user;
+        toast.success("Login!");
+        setLoading(false)
+        setEmail("");
+        setPassword("");
+        navigate("/");
+
+      }).catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        const email = error.email;
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        toast.error(error.message);
+        setLoading(false)
+      })
+  }
 
   return (
     <>
@@ -56,11 +81,11 @@ const Login = () => {
               onChange={(e) => setPassword(e.target.value)}
             ></input>
             <button type="submit">LOGIN</button>
-            <Link to="/reset" clasName={LoginSass.forgot}>
+            <Link to="/reset" className={LoginSass.forgot}>
               Forgot password?
             </Link>
             <p>--or--</p>
-            <button className={LoginSass.loginGoogle}>Login with Google</button>
+            <button onClick={signInWithGoogle} className={LoginSass.loginGoogle}>Login with Google</button>
             <p>
               Don't have an account? <Link to="/register">Register</Link>
             </p>
