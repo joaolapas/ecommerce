@@ -8,15 +8,21 @@ import { IoClose } from "react-icons/io5";
 import { ToastContainer, toast } from "react-toastify";
 import { auth } from "../../firebase/config";
 import { signOut, onAuthStateChanged } from "firebase/auth";
+import useStore from "../../Zustand/Store";
 
-const cart = (
+
+
+const Cart = () => {
+  const count = useStore(state=>state.count)
+  return (
   <li className={HeaderSass.link}>
     <Link className={HeaderSass.cartLink} to="/cart">
       <FaShoppingCart />
-      <span className={HeaderSass.cartCount}>0</span>
+      <span className={HeaderSass.cartCount}>{count}</span>
     </Link>
   </li>
-);
+  )
+}
 
 const logo = (
   <Link to="/">
@@ -30,6 +36,7 @@ const Header = () => {
   const [admin, setAdmin] = React.useState(false);
   const [showMenu, setShowMenu] = React.useState(false);
   const [userName, setUserName] = React.useState("");
+  
 
   const navigate = useNavigate();
 
@@ -128,17 +135,17 @@ const Header = () => {
                     Register
                   </Link>
                 </li>
-              )}{cart}
+              )}<Cart/>
             </ul>
             
             {showMenu ? (
               <>
-                <div className={HeaderSass.hamburgercart}>{cart}</div>
+                <div className={HeaderSass.hamburgercart}><Cart/></div>
                 <IoClose className={HeaderSass.hamburger} onClick={toggleMenu} />
               </>
             ) : (
               <>
-                <div className={HeaderSass.hamburgercart}>{cart}</div>
+                <div className={HeaderSass.hamburgercart}><Cart/></div>
                 <HiMenu className={HeaderSass.hamburger} onClick={toggleMenu} />
               </>
             )}
