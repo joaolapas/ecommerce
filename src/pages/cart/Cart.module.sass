@@ -1,0 +1,78 @@
+@use '../../styles/variables.sass' as styles
+
+.container
+    display: flex
+    flex-direction: column
+    align-items: center
+    justiify-content: center
+    min-height: 80vh
+
+    .list
+        margin: 30px
+        display: flex
+        flex-direction: column
+        align-items: center
+        justiify-content: center
+        gap: 10px
+
+        .listItem
+            height: 20vh
+            width: 40vw
+            background: styles.$white
+            border-radius: 10px
+            border: 2px solid styles.$darkgreen
+            display: flex
+            align-items: center
+            padding: 2%
+
+            .listImg
+                width:14vw
+                height: 18vh
+                background: styles.$darkblue
+                border-radius: 10px 
+
+            .listContent
+                padding: 2%
+                display: flex
+                flex-direction: column
+                height: 100%
+                width: 100%
+
+                .listTittle
+                    height: 50%
+                    display: flex
+                    align-items: center
+
+                    h2
+                        color: styles.$darkblue
+                        font-size: 2rem
+                        height: 100%
+
+                .listQtyGroup
+                    display: flex
+                    .listQty
+                        font-size: 1.5rem  
+                    button
+                        width: 23px 
+                        height: 23px
+                        margin: 0 5px
+                        border-radius: 50%
+                        border: none
+                        background: styles.$darkgreen
+                        transition: all .3s ease-in-out
+                        &:hover
+                            background: styles.$orange
+                            transition: all .3s ease-in-out
+                .remove
+                    background: styles.$orange
+                    border: none
+                    border-radius: 5px
+                    padding: 5px  
+                    &:hover
+                        background: styles.$orange      
+
+.buttons
+    width: 100%
+    display: flex
+    justify-content: space-between
+                    

@@ -13,12 +13,14 @@ import useStore from "../../Zustand/Store";
 
 
 const Cart = () => {
-  const count = useStore(state=>state.count)
+  const cart = useStore(state=>state.cart)
+  const sum = useStore(state=>state.sum)
+  const showCount = useStore(state=>state.showCount)
   return (
   <li className={HeaderSass.link}>
     <Link className={HeaderSass.cartLink} to="/cart">
       <FaShoppingCart />
-      <span className={HeaderSass.cartCount}>{count}</span>
+      <span className={HeaderSass.cartCount}>{sum}</span>
     </Link>
   </li>
   )
