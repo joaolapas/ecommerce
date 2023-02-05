@@ -6,7 +6,7 @@ const Store = (set) => ({
   cart: [],
   sum: 0,
 
-  addProduct: (product, quantity) => {
+  addToCart: (product, quantity) => {
     if (product != "") {
       set((state) => {
         let exists = false;

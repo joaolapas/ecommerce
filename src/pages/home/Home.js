@@ -2,18 +2,19 @@ import React, {useEffect} from "react";
 import { Search } from "../../components";
 import HomeSass from "./Home.module.sass";
 import useStore from "../../Zustand/Store";
+import img from '../../assets/product1.png'
 
 const Card = (props) => {
-  const addProduct = useStore((state) => state.addProduct);
+  const addToCart = useStore((state) => state.addToCart);
   const resetCart = useStore((state) => state.resetCart);
   const cart = useStore((state) => state.cart);
   const [product, setProduct] = React.useState("");
 
   const handleClear = () => resetCart();
-  const handleAdd = (p, q) => addProduct(p, q);
+  const handleAdd = (p, q) => addToCart(p, q);
   return (
     <div className={HomeSass.card}>
-      <img className={HomeSass.productImage} />
+      <img className={HomeSass.productImage} src={img}/>
       <h3 className={HomeSass.title}>Product {props.number}</h3>
       <h4 className={HomeSass.price}>€19.99</h4>
       <button className={HomeSass.addToCart} onClick={()=>handleAdd(props.product, 1)}>ADD TO CART</button>
@@ -21,7 +22,7 @@ const Card = (props) => {
   );
 };
 const Home = () => {
-  const addProduct = useStore((state) => state.addProduct);
+  const addToCart = useStore((state) => state.addToCart);
   const resetCart = useStore((state) => state.resetCart);
   const showCount = useStore((state) => state.showCount);
   const cart = useStore((state) => state.cart);

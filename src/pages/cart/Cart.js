@@ -8,9 +8,10 @@ const Cart = () => {
   const deleteProduct = useStore((state) => state.deleteProduct);
   const qtyAddOne = useStore((state) => state.qtyAddOne);
   const qtySubtractOne = useStore((state) => state.qtySubtractOne);
+  const sum = useStore(state=>state.sum)
   return (
     <div className={CartSass.container}>
-      <h2>Your cart:</h2>
+      {sum== 0?<div>Your cart is empty!</div> :<div>Your cart:</div>}
       <div className={CartSass.list}>
         {cart.map((item) => (
           <div className={CartSass.listItem} key={item.product}>
@@ -42,7 +43,7 @@ const Cart = () => {
           </div>
         ))}
       </div>
-      <button onClick={resetCart}>Reset</button>
+      {sum != 0 ? <button onClick={resetCart}>Reset</button> : ''}
     </div>
   );
 };
