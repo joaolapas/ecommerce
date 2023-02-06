@@ -27,8 +27,8 @@ const Cart = () => {
 }
 
 const logo = (
-  <Link to="/">
-    <img className={HeaderSass.logo} src={logoImg} alt="logo"></img>
+  <Link to="/" className={HeaderSass.logo}>
+    <h1><span className={HeaderSass.e}>e</span><span className={HeaderSass.dollar}>$</span>tore</h1>
   </Link>
 );
 

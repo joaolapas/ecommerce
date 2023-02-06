@@ -20,7 +20,7 @@
             width: 40vw
             background: styles.$white
             border-radius: 10px
-            border: 2px solid styles.$darkgreen
+            border: 2px solid styles.$orange
             display: flex
             align-items: center
             padding: 2%
@@ -28,7 +28,6 @@
             .listImg
                 width:14vw
                 height: 18vh
-                background: styles.$darkblue
                 border-radius: 10px 
 
             .listContent
@@ -58,21 +57,29 @@
                         margin: 0 5px
                         border-radius: 50%
                         border: none
-                        background: styles.$darkgreen
+                        background: styles.$orange
                         transition: all .3s ease-in-out
                         &:hover
-                            background: styles.$orange
+                            background: styles.$darkgreen
                             transition: all .3s ease-in-out
+                            cursor: pointer
                 .remove
-                    background: styles.$orange
+                    background: styles.$orange 
                     border: none
                     border-radius: 5px
                     padding: 5px  
+                    cursor: pointer
+                    transition: all .3s ease-in-out
                     &:hover
-                        background: styles.$orange      
+                        background: styles.$darkgreen     
+                        transition: all .3s ease-in-out
 
 .buttons
     width: 100%
     display: flex
     justify-content: space-between
+
+    button
+        color: styles.$white
+        font-weight: bold
                     

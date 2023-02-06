@@ -6,27 +6,36 @@ const Store = (set) => ({
   cart: [],
   sum: 0,
 
-  addToCart: (product, quantity) => {
-    if (product != "") {
+  addToCart: (props) => {
+    const { title, price, img, id, description, longDescription } = props;
+    console.log('props em store', props);
+    const quantity = 1;
+    if (title !== "") {
       set((state) => {
         let exists = false;
-        state.sum = 1;
         let updatedCart = state.cart.map((item) => {
-          state.sum += item.quantity;
-          if (item.product === product) {
+          if (item.title === title) {
             exists = true;
             return {
-              product: item.product,
+              ...item,
               quantity: item.quantity + quantity,
             };
           }
           return item;
         });
         if (!exists) {
-          updatedCart = [...updatedCart, { product, quantity }];
+          updatedCart = [
+            ...state.cart,
+            { title:title, price, img, id, description, longDescription, quantity },
+            
+          ];
         }
-        return { cart: updatedCart };
+        return {
+          cart: updatedCart,
+          sum: state.sum + quantity,
+        };
       });
+      
     }
   },
 
@@ -37,10 +46,10 @@ const Store = (set) => ({
     }));
   },
 
-  deleteProduct: (product) => {
+  deleteProduct: (id) => {
     set((state) => {
-      let updatedCart = state.cart.filter((item) => item.product !== product);
-      let deletedProduct = state.cart.find((item) => item.product === product);
+      let updatedCart = state.cart.filter((item) => item.id !== id);
+      let deletedProduct = state.cart.find((item) => item.id === id);
       let updatedSum = state.sum;
       if (deletedProduct) {
         updatedSum -= deletedProduct.quantity;
@@ -52,42 +61,47 @@ const Store = (set) => ({
     });
   },
 
-  qtyAddOne: (product) => {
+  qtyAddOne: (id) => {
     set((state) => {
       let updatedCart = state.cart.map((item) => {
-        if (item.product === product) {
-          state.sum += 1;
+        if (item.id === id) {
           return {
-            product: item.product,
+            ...item,
             quantity: item.quantity + 1,
           };
         }
         return item;
       });
-      return { cart: updatedCart };
+      return {
+        cart: updatedCart,
+        sum: state.sum + 1,
+      };
     });
   },
 
-  qtySubtractOne: (product) => {
+  qtySubtractOne: (id) => {
     set((state) => {
       let updatedCart = state.cart.map((item) => {
-        if (item.product === product) {
+        if (item.id === id) {
           let updatedQuantity = item.quantity - 1;
           if (updatedQuantity === 0) {
             return;
           }
           return {
-            product: item.product,
+            ...item,
             quantity: updatedQuantity,
           };
         }
         return item;
       });
       updatedCart = updatedCart.filter((item) => item);
-      state.sum -= 1;
-      return { cart: updatedCart, sum: state.sum };
+      return {
+        cart: updatedCart,
+        sum: state.sum - 1,
+      };
     });
-  }
+  },
 });
+
 const useStore = create(devtools(persist(Store, { name: "counter" })));
 export default useStore;

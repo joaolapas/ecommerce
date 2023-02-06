@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import AdminSass from "./Admin.module.sass";
 import app, { storageX, db } from "../../firebase/config.js";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { collection, addDoc, doc, getDoc } from "firebase/firestore";
+import { collection, addDoc, doc, getDocs, deleteDoc } from "firebase/firestore";
 
 const Admin = () => {
   const [image, setImage] = useState(null);
@@ -13,37 +13,24 @@ const Admin = () => {
   const [description, setDescription] = useState("");
   const [longDescription, setLongDescription] = useState("");
   const collectionRef = collection(db, "products");
-  const docRef = doc(db, "products", Date.now().toString());
-  //const docSnap = getDoc(docRef);
-  const [productData, setProductData] = useState([]);
+  const [docs, setDocs] = useState([]);
 
-  async function fetchData() {
-    //const db = firebase.firestore();
-    const docRef = db.collection('collectionName').doc('docId');
-    
-    try {
-      const doc = await docRef.get();
-      
-      if (doc.exists) {
-        console.log(doc.data());
-      } else {
-        console.log('Document does not exist');
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  }
-  
-  const productsList = fetchData();
-  
+  useEffect(() => {
+    const fetchData = async () => {
+      const querySnapshot = await getDocs(collectionRef);
+      setDocs(querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    };
+    fetchData();
+  }, [() => handleUpload()]);
 
   const handleChange = (e) => {
     if (e.target.files[0]) {
       setImage(e.target.files[0]);
     }
   };
-  
-
+  const handleRemove = async (id) => {
+    await deleteDoc(doc(db, "products", id));
+  }
   const handleUpload = () => {
     const storageRef = ref(storageX, `images/${image.name}`);
 
@@ -63,17 +50,17 @@ const Admin = () => {
       },
       () => {
         // complete function ...
-        getDownloadURL(ref(storageX, `images/${image.name}`))
-          .then((url) => {
-            setUrl(url);
-            addDoc(collectionRef, {
-              title: title,
-              price: price,
-              description: description,
-              longDescription: longDescription,
-              image: url,
-            });
+        getDownloadURL(ref(storageX, `images/${image.name}`)).then((url) => {
+          setUrl(url);
+          addDoc(collectionRef, {
+            title: title,
+            price: price,
+            description: description,
+            longDescription: longDescription,
+            image: url,
+            id: new Date().getTime(),
           });
+        });
       }
     );
   };
@@ -85,8 +72,8 @@ const Admin = () => {
 
   return (
     <div className={AdminSass.products}>
-      <div>Insert products</div>
-      <form onSubmit={handleSubmit}>
+      <h2>Insert products</h2>
+      <form onSubmit={handleSubmit} className={AdminSass.insertProductsForm}>
         Title:{" "}
         <input
           type="text"
@@ -125,16 +112,21 @@ const Admin = () => {
         <button type="submit">Submit</button>
       </form>
       <div>
-    {productData.map((product) => (
-      <div key={product.id}>
-        <h3>{product.title}</h3>
-        <p>{product.description}</p>
-        <img src={product.image} alt={product.title} />
-        
+        {docs.map((doc) => (
+          <div className={AdminSass.product} key={doc.id}>
+            <img src={doc.image} alt={doc.title} />
+            <div className={AdminSass.details}>
+              <p>Title: {doc.title}</p>
+              <p>Price: {doc.price}</p>
+              <p>Description: {doc.description}</p>
+            </div>
+            <div className={AdminSass.buttons}>
+              <button>Edit</button>
+              <button onClick={()=>handleRemove(doc.id)}>Remove</button>
+            </div>
+          </div>
+        ))}
       </div>
-    ))}
-  </div>
-     {productsList.map((product) => (<div>{product.name}</div>))} 
     </div>
   );
 };

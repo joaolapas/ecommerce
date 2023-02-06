@@ -1,23 +1,25 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import { Search } from "../../components";
 import HomeSass from "./Home.module.sass";
 import useStore from "../../Zustand/Store";
-import img from '../../assets/product1.png'
+import img from '../../assets/product1.png';
+import { collection, addDoc, doc, getDocs } from "firebase/firestore";
+import app, { storageX, db } from "../../firebase/config.js";
 
 const Card = (props) => {
   const addToCart = useStore((state) => state.addToCart);
   const resetCart = useStore((state) => state.resetCart);
   const cart = useStore((state) => state.cart);
   const [product, setProduct] = React.useState("");
+  const handleAdd = (props) => addToCart(props);
+  
 
-  const handleClear = () => resetCart();
-  const handleAdd = (p, q) => addToCart(p, q);
   return (
     <div className={HomeSass.card}>
-      <img className={HomeSass.productImage} src={img}/>
-      <h3 className={HomeSass.title}>Product {props.number}</h3>
-      <h4 className={HomeSass.price}>€19.99</h4>
-      <button className={HomeSass.addToCart} onClick={()=>handleAdd(props.product, 1)}>ADD TO CART</button>
+      <img className={HomeSass.productImage} src={props.img}/>
+      <h3 className={HomeSass.title}>{props.title}</h3>
+      <h4 className={HomeSass.price}>€{props.price}</h4>
+      <button className={HomeSass.addToCart} onClick={()=>handleAdd(props)}>ADD TO CART</button>
     </div>
   );
 };
@@ -27,6 +29,16 @@ const Home = () => {
   const showCount = useStore((state) => state.showCount);
   const cart = useStore((state) => state.cart);
   const [sum, setSum] = React.useState(0);
+  const collectionRef = collection(db, "products");
+  const [docs, setDocs] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const querySnapshot = await getDocs(collectionRef);
+      setDocs(querySnapshot.docs.map((doc) => ({ ...doc.data()})));
+    };
+    fetchData();
+  }, []);
   
   useEffect(() => {
     setSum(0)
@@ -48,15 +60,17 @@ const Home = () => {
   return (
     <div className={HomeSass.container}>
       
-      <Card number={1} product='product 1'/>
-      <Card number={2} product='product 2'/>
-      <Card number={3} product='product 3'/>
-      <Card number={4} product='product 4'/>
-      <Card number={5} product='product 5'/>
-      <button onClick={handleClear}>Clear</button>
-
-      <div>{sum}</div>
-      <div>{showCount}</div>
+    {docs.map((doc) => (
+      <Card 
+        key={doc.id}
+        title={doc.title}
+        price={doc.price}
+        img={doc.image}
+        description={doc.description}
+        id={doc.id}
+      />
+    ))}
+     
     </div>
   );
 };
