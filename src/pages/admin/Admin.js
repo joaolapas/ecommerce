@@ -28,7 +28,8 @@ const Admin = () => {
   const [longDescription, setLongDescription] = useState("");
   const collectionRef = collection(db, "products");
   const [docs, setDocs] = useState([]);
-  const [modalIsOpen, setModalIsOpen] = useState(true);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [currentDocIndex, setCurrentDocIndex] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -88,13 +89,16 @@ const Admin = () => {
     );
   };
 
+  const openModal = (index) => {
+    setModalIsOpen(true);
+    setCurrentDocIndex(index);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     handleUpload();
   };
-  const handleEdit = (doc) => {
-    setModalIsOpen(true);
-  };
+  
 
   return (
     <div className={AdminSass.products}>
@@ -139,8 +143,15 @@ const Admin = () => {
         <button type="submit">ADD PRODUCT</button>
       </form>
       <div>
-        {docs.map((doc) => (
+        {docs.map((doc, index) => (
           <div className={AdminSass.product} key={doc.id}>
+            {modalIsOpen && (
+              <Modal>
+                <h2>{doc[currentDocIndex].title}</h2>
+                <img src={doc[currentDocIndex].image} />
+                <button onClick={() => setModalIsOpen(false)}>fechar</button>
+              </Modal>
+            )}
             <img src={doc.image} alt={doc.title} />
             <div className={AdminSass.details}>
               <p>Title: {doc.title}</p>
@@ -148,21 +159,14 @@ const Admin = () => {
               <p>Description: {doc.description}</p>
             </div>
             <div className={AdminSass.buttons}>
-              <button onClick={() => handleEdit(doc)}>Edit</button>
+              <button onClick={() => openModal(index)}>Edit</button>
               <button onClick={() => handleRemove(doc.id, doc.image)}>
                 Remove
               </button>
-              <Modal doc={doc}>
-              <button onClick={()=>setModalIsOpen(false)}>fechar</button>
-              </Modal>
             </div>
           </div>
         ))}
       </div>
-      <button onClick={()=>setModalIsOpen(true)}>Modal</button>
-      {modalIsOpen && <Modal>
-          <button onClick={()=>setModalIsOpen(false)}>fechar</button>
-      </Modal>}
     </div>
   );
 };

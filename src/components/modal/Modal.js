@@ -1,15 +1,12 @@
-import ModalSass from './Modal.module.sass'
-const Modal = ({children}) => {
-  
+import ModalSass from "./Modal.module.sass";
+import React, { useState } from "react";
+const Modal = ({ children }) => {
 
   return (
-    
-        <div className={ModalSass.modal}>
-          <div className={ModalSass.modalEditForm}>
-            {children}
-          </div>
-        </div>
-    
+    <div className={ModalSass.modal}>
+        
+      <div className={ModalSass.modalChild}>{children}</div>
+    </div>
   );
 };
 
